@@ -9,9 +9,11 @@
 
 | Nombre | Descripción |
 |--------|-------------|
-| Alejandro Valentin Saldaña Mendez | — |
+| Alejandro Valentin Saldaña Mendez | Analisis de datos - Visualizacion |
+| Eduardo Francisco Peñaloza Uribe  | Narrativa - Storytelling          |
+| Tetsu Nicolas Osnaya Quevedo      | Desarrollo - Dashboard           | 
 
-*(integrantes adicionales por agregar)*
+
 
 ---
 

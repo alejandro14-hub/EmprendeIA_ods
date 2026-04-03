@@ -1,0 +1,287 @@
+---
+title: "Estudiar No Es Suficiente"
+subtitle: "Pobreza, Educación y Empleo Digno en México · ODS 1, 4 y 8"
+author: "EmprendeIA_ods · HackODS UNAM"
+format:
+  dashboard:
+    theme: [darkly, modern.scss]
+    nav-buttons:
+      - icon: github
+        href: https://github.com/alejandro14-hub/EmprendeIA_ods
+lang: es
+execute:
+  echo: false
+  warning: false
+  cache: false
+---
+
+```{python}
+import pandas as pd
+import numpy as np
+import plotly.graph_objects as go
+import plotly.express as px
+from openpyxl import load_workbook
+from pathlib import Path
+import json
+import statistics
+import pydeck as pdk
+import warnings
+warnings.filterwarnings('ignore')
+
+# PALETA PREMIUM SOBER (Data Journalism Dark)
+C_POB  = '#3b82f6' # Blue
+C_EDU  = '#10b981' # Teal
+C_EMP  = '#8b5cf6' # Indigo
+C_WARN = '#f43f5e' # Rose
+C_INFO = '#f59e0b' # Amber
+
+D1 = Path('datos/ods1')
+D4 = Path('datos/ods4')
+D8 = Path('datos/ods8')
+
+# --- ODS 1: Pobreza ---
+wb = load_workbook(D1 / 'Concentrado_indicadores_de_pobreza_2020.xlsx', read_only=True)
+ws = wb['Concentrado estatal']
+filas = list(ws.iter_rows(max_row=70, values_only=True))
+
+estados = []
+for r in filas[7:]:
+    if r[1] and str(r[1]).strip().isdigit():
+        estados.append({
+            'estado':    str(r[2]).strip(),
+            'pct_2020':  float(r[8]) if r[8] else None,
+        })
+df_pob = pd.DataFrame(estados).dropna(subset=['pct_2020'])
+df_pob['pct_2020'] = df_pob['pct_2020'].round(2)
+
+# --- ODS 4: Educación ---
+wb4 = load_workbook(D4 / 'Educacion_11.xlsx', read_only=True)
+ws4 = wb4.active
+filas4 = list(ws4.iter_rows(max_row=300, values_only=True))
+NIVELES = ['Media superior']
+aban = []
+for r in filas4[6:]:
+    if r[0] and r[1] and str(r[1]).strip() in NIVELES:
+        aban.append({
+            'estado': str(r[0]).strip(), 'nivel': str(r[1]).strip(),
+            'a2024': r[9],
+        })
+df_aban = pd.DataFrame(aban)
+df_aban['a2024'] = pd.to_numeric(df_aban['a2024'], errors='coerce')
+aban_ms = df_aban[(df_aban['nivel']=='Media superior') & (df_aban['estado']!='Estados Unidos Mexicanos')][['estado', 'a2024']].dropna()
+aban_ms.columns = ['estado', 'abandono_ms']
+
+nac_ms = df_aban[(df_aban['nivel']=='Media superior') & (df_aban['estado']=='Estados Unidos Mexicanos')]['a2024'].values[0]
+
+# --- ODS 8: Empleo ---
+df_des = pd.read_csv(D8 / '8.5.2(2)_sh_es.csv', na_values=['NAN', 'ND'])
+DMAP = {
+    'Periodo': 'año',
+    'cvegeo': 'cvegeo',
+    'Entidad_federativa': 'estado',
+    'Sexo|Total_Grupo_de_edad|Total': 'tasa_total',
+}
+df_des = df_des.rename(columns=DMAP)[list(DMAP.values())]
+# Remove underscores mapping issues
+df_des['estado'] = df_des['estado'].astype(str).str.strip().str.replace('_', ' ')
+
+des_estatal = df_des[(df_des['cvegeo'] != 0) & (df_des['año'] == 2019)][['estado', 'tasa_total']].dropna()
+
+# Fusión Maestra para 3D
+df_3d = df_pob[['estado', 'pct_2020']].merge(aban_ms, on='estado').merge(des_estatal, on='estado')
+
+df_sal = pd.read_csv(D8 / '8.5.1c_sh_es.csv', na_values=['NAN','ND'])
+RCOLS = {
+    'Periodo': 'año',
+    'Sexo|Total_Tipo_de_ocupación|Directores_y_gerentes': 'directivos',
+    'Sexo|Total_Tipo_de_ocupación|Profesionales_científicos_e_intelectuales':'profesionales',
+    'Sexo|Total_Tipo_de_ocupación|Técnicos_y_profesionales_de_nivel_medio': 'tecnicos',
+    'Sexo|Total_Tipo_de_ocupación|Trabajadores_de_los_servicios_y_vendedores_de_comercios_y_mercados': 'servicios',
+    'Sexo|Total_Tipo_de_ocupación|Ocupaciones_elementales': 'elementales',
+    'Sexo|Total_Tipo_de_ocupación|Total': 'total'
+}
+df_sal = df_sal.rename(columns=RCOLS)
+keep = [c for c in RCOLS.values() if c in df_sal.columns]
+df_sal = df_sal[keep].dropna(subset=['total'])
+sal24 = df_sal[df_sal['año']==2024].iloc[0]
+
+
+# --- MAPA PYDECK PREP ---
+with open('datos/geo/mexico_estados.json', encoding='utf-8') as f:
+    geo = json.load(f)
+
+EQUIV = {'Coahuila de Zaragoza':'Coahuila', 'Michoacán de Ocampo':'Michoacán', 'Veracruz de Ignacio de la Llave':'Veracruz'}
+centroids = {}
+for feat in geo['features']:
+    nombre = feat['properties']['name']
+    coords = feat['geometry']['coordinates']
+    todos_x, todos_y = [], []
+    if feat['geometry']['type'] == 'Polygon':
+        for ring in coords:
+            for lon, lat in ring: todos_x.append(lon); todos_y.append(lat)
+    elif feat['geometry']['type'] == 'MultiPolygon':
+        for poly in coords:
+            for ring in poly:
+                for lon, lat in ring: todos_x.append(lon); todos_y.append(lat)
+    if todos_x:
+        centroids[nombre] = (statistics.mean(todos_x), statistics.mean(todos_y))
+
+df_map = df_pob.copy()
+df_map['nombre_geo'] = df_map['estado'].map(lambda x: EQUIV.get(x, x))
+df_map['lon'] = df_map['nombre_geo'].map(lambda x: centroids.get(x,(None,None))[0])
+df_map['lat'] = df_map['nombre_geo'].map(lambda x: centroids.get(x,(None,None))[1])
+df_map = df_map.dropna(subset=['lon','lat','pct_2020'])
+df_deck = df_map[['nombre_geo', 'lon', 'lat', 'pct_2020']].copy()
+df_deck['elevacion'] = df_deck['pct_2020'] * 15000
+
+def get_map_color(pct):
+    if pct > 60: return [244, 63, 94, 200]
+    elif pct > 45: return [245, 158, 11, 200]
+    elif pct > 30: return [139, 92, 246, 200]
+    else: return [16, 185, 129, 200]
+
+df_deck['color'] = df_deck['pct_2020'].apply(get_map_color)
+
+def pre_format(fig):
+    fig.update_layout(
+        template="plotly_dark", 
+        paper_bgcolor="rgba(0,0,0,0)", 
+        plot_bgcolor="rgba(0,0,0,0)",
+        margin=dict(t=30, b=40, l=10, r=40),
+        font=dict(family="Inter, sans-serif", size=13, color="#8b949e")
+    )
+    if fig.layout.xaxis:
+        fig.update_xaxes(showgrid=False, zeroline=False, linecolor="#30363d")
+    if fig.layout.yaxis:
+        fig.update_yaxes(showgrid=False, zeroline=False, linecolor="#30363d")
+    return fig
+```
+
+# Fase I: Topografía (ODS 1) 
+
+## Panel Narrativo {.sidebar width=30%}
+
+### El relato de un sistema roto.
+*"Estudiar prometió ser el puente hacia un futuro distinto, pero para millones de mexicanos ese puente lo construyeron sobre un abismo económico."*
+
+### Acto I: La Línea de Salida Rota
+Interactúa con el **Mapa Topográfico 3D**. El código postal dicta estadísticamente tu éxito desde el nacimiento.
+
+Los "rascacielos" de colores más cálidos y altos representan una realidad dolorosa: el sur del país y regiones centralizadas concentran carencias extremas que vuelven al concepto de la "educación de calidad" un lujo inalcanzable. Este es el punto de partida que empujará todo el ciclo que verás a continuación.
+
+**Navega a la siguiente página (en la barra superior) para ver la Fase II.**
+
+
+## Columna Gráfica {width=70%}
+
+```{python}
+#| title: "La barrera inicial de la Pobreza en México"
+layer = pdk.Layer(
+    "ColumnLayer",
+    data=df_deck.to_dict(orient="records"),
+    get_position=["lon", "lat"],
+    get_elevation="elevacion",
+    elevation_scale=1,
+    radius=18000,
+    get_fill_color="color",
+    pickable=True,
+    auto_highlight=True,
+)
+view_state = pdk.ViewState(longitude=-100.5, latitude=23.6, zoom=4.3, pitch=50, bearing=-10)
+deck = pdk.Deck(layers=[layer], initial_view_state=view_state, map_provider="carto", map_style=pdk.map_styles.DARK, tooltip={"html": "<div style='font-family: Inter, sans-serif;'><b>{nombre_geo}</b><br/>Población en Pobreza: <b style='color:#f43f5e'>{pct_2020}%</b></div>"})
+deck.to_html("map_home.html", iframe_height=700)
+```
+
+
+# Fase II: Puente Roto (ODS 4)
+
+## Panel Narrativo {.sidebar width=30%}
+
+### Acto II: El Abandono Escolar
+
+La pobreza expulsa a las mentes brillantes del salón. 
+
+Interactúa y gira este **Cubo de la Precariedad**. Hemos fusionado las estadísticas y aquí es donde la historia duele más:
+
+*   **Eje X:** Demuestra la Pobreza del Estado.
+*   **Eje Y:** Muestra la tasa de Abandono Escolar en nivel medio superior.
+*   **Eje Z (Profundidad):** Mide la Tasa de Desocupación Laboral.
+
+**Descubrimiento Vital:** 
+Si haces girar el cubo, notarás visualmente que la nube de puntos está pegada y ascendente. **Ningún estado** logra tener altos índices de abandono escolar sin sufrir forzosamente de altísima pobreza y desocupación a la vez. No desertan por falta de intelecto, desertan expulsados por un abismo económico.
+
+
+## Columna Gráfica {width=70%}
+
+```{python}
+#| title: "Súper Gráfica 3D: Pobreza, Educación y Desempleo unidos en el mismo espacio."
+
+fig_3d = px.scatter_3d(
+    df_3d,
+    x='pct_2020', y='abandono_ms', z='tasa_total',
+    color='pct_2020', hover_name='estado',
+    hover_data={'pct_2020':':.1f','abandono_ms':':.1f','tasa_total':':.1f'},
+    labels={'pct_2020':'Pobreza %','abandono_ms':'Abandono prepa %','tasa_total':'Desocupación %'},
+    color_continuous_scale=[[0.0,'#10b981'],[0.3,'#f59e0b'],[0.6,'#f43f5e'],[1.0,'#7f1d1d']],
+    opacity=0.92, size='pct_2020', size_max=18,
+)
+
+_ = fig_3d.update_traces(
+    marker=dict(line=dict(width=1, color='rgba(255,255,255,0.3)')),
+    hovertemplate='<b>%{hovertext}</b><br>Pobreza: %{x:.1f}%<br>Abandono prepa: %{y:.1f}%<br>Desocupación: %{z:.1f}%<extra></extra>'
+)
+
+_ = fig_3d.update_layout(
+    template="plotly_dark",
+    paper_bgcolor="rgba(0,0,0,0)",
+    plot_bgcolor="rgba(0,0,0,0)",
+    scene=dict(
+        xaxis_title="ODS 1: Pobreza %",
+        yaxis_title="ODS 4: Abandono Escolar %",
+        zaxis_title="ODS 8: Desocupación %",
+        xaxis=dict(showgrid=True, gridcolor="#30363d", backgroundcolor="rgba(0,0,0,0)"),
+        yaxis=dict(showgrid=True, gridcolor="#30363d", backgroundcolor="rgba(0,0,0,0)"),
+        zaxis=dict(showgrid=True, gridcolor="#30363d", backgroundcolor="rgba(0,0,0,0)")
+    ),
+    height=700, margin=dict(l=0, r=0, b=0, t=50)
+)
+fig_3d.show()
+```
+
+
+# Fase III: Condena Laboral (ODS 8)
+
+## Panel Narrativo {.sidebar width=30%}
+
+### Acto III: Empleos sin Dignidad
+
+¿A dónde van los jóvenes que abandonan el aula expulsados por la pobreza?
+
+El sistema laboral absorbe a esta población desertora y los entierra en trabajos de baja remuneración. Clasificados por el INEGI como **"Ocupaciones Elementales"**.
+
+Generando apenas un tercio del ingreso de los profesionistas por hora trabajada, el candado sociodemográfico finalmente hace "clic" y se cierra paraatraparlos hasta su jubilación. Empezaron en la pobreza, y terminan en la falta de un empleo digno.
+
+El ciclo de la investigación social concluye aquí. **Estudiar no es suficiente** cuando el suelo está roto.
+
+## Columna Gráfica {width=70%}
+
+```{python}
+#| title: "El Destino Final: Renta Nacional por Hora Trabajada (MXN - Año 2024)"
+LABS = {'directivos':'Directivos', 'profesionales':'Profesionales', 'tecnicos':'Técnicos', 'servicios':'Servicios', 'elementales':'Operativos/Elementales'}
+sal_d = {LABS[k]: sal24[k] for k in LABS if k in sal24.index}
+sal_df = pd.DataFrame(list(sal_d.items()), columns=['ocupacion', 'salario']).sort_values('salario')
+
+cmars = [C_EMP if i < 2 else C_POB if i < 4 else C_EDU for i in range(len(sal_df))]
+fig5 = go.Figure(go.Bar(
+    x=sal_df.salario, 
+    y=sal_df.ocupacion, 
+    orientation='h', 
+    marker_color=cmars, 
+    text=[f"${int(s)} / hr" for s in sal_df.salario], 
+    textposition='outside'
+))
+
+fig5 = pre_format(fig5)
+_ = fig5.update_layout(height=700, xaxis_title="Ingreso Promedio por Hora Trabajada (MXN)", margin=dict(t=50, b=20, l=10, r=50))
+fig5.show()
+```

@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <title>pydeck</title>
+        <script src="https://api.tiles.mapbox.com/mapbox-gl-js/v1.13.0/mapbox-gl.js"></script>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" />
+    <script src='https://cdn.jsdelivr.net/npm/@deck.gl/jupyter-widget@~9.0.*/dist/index.js'></script>
+    <style>
+    body {
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+#deck-container {
+  width: 100vw;
+  height: 100vh;
+}
+
+#deck-container canvas {
+  z-index: 1;
+  background: none;
+}
+    </style>
+  </head>
+  <body>
+    <div id="deck-container">
+    </div>
+  </body>
+  <script>
+    const container = document.getElementById('deck-container');
+    const jsonInput = {
+  "initialViewState": {
+    "bearing": -10,
+    "latitude": 23.6,
+    "longitude": -100.5,
+    "pitch": 50,
+    "zoom": 4.3
+  },
+  "layers": [
+    {
+      "@@type": "ColumnLayer",
+      "autoHighlight": true,
+      "data": [
+        {
+          "color": [
+            16,
+            185,
+            129,
+            200
+          ],
+          "elevacion": 412950.0,
+          "lat": 21.963572222222222,
+          "lon": -102.38722407407407,
+          "nombre_geo": "Aguascalientes",
+          "pct_2020": 27.53
+        },
+        {
+          "color": [
+            16,
+            185,
+            129,
+            200
+          ],
+          "elevacion": 346800.0,
+          "lat": 29.794878,
+          "lon": -114.78842,
+          "nombre_geo": "Baja California",
+          "pct_2020": 23.12
+        },
+        {
+          "color": [
+            16,
+            185,
+            129,
+            200
+          ],
+          "elevacion": 410250.0,
+          "lat": 25.437700584795323,
+          "lon": -111.95141695906433,
+          "nombre_geo": "Baja California Sur",
+          "pct_2020": 27.35
+        },
+        {
+          "color": [
+            245,
+            158,
+            11,
+            200
+          ],
+          "elevacion": 728100.0,
+          "lat": 19.002542276422766,
+          "lon": -90.88746260162601,
+          "nombre_geo": "Campeche",
+          "pct_2020": 48.54
+        },
+        {
+          "color": [
+            16,
+            185,
+            129,
+            200
+          ],
+          "elevacion": 353700.0,
+          "lat": 27.27246603773585,
+          "lon": -101.88559386792453,
+          "nombre_geo": "Coahuila",
+          "pct_2020": 23.58
+        },
+        {
+          "color": [
+            16,
+            185,
+            129,
+            200
+          ],
+          "elevacion": 417150.0,
+          "lat": 19.152540540540542,
+          "lon": -103.98927297297297,
+          "nombre_geo": "Colima",
+          "pct_2020": 27.81
+        },
+        {
+          "color": [
+            244,
+            63,
+            94,
+            200
+          ],
+          "elevacion": 1116450.0,
+          "lat": 16.71558626609442,
+          "lon": -92.34827982832618,
+          "nombre_geo": "Chiapas",
+          "pct_2020": 74.43
+        },
+        {
+          "color": [
+            16,
+            185,
+            129,
+            200
+          ],
+          "elevacion": 382500.0,
+          "lat": 28.41004314159292,
+          "lon": -106.23497898230089,
+          "nombre_geo": "Chihuahua",
+          "pct_2020": 25.5
+        },
+        {
+          "color": [
+            139,
+            92,
+            246,
+            200
+          ],
+          "elevacion": 512849.99999999994,
+          "lat": 19.245497142857143,
+          "lon": -99.06628571428571,
+          "nombre_geo": "Ciudad de M\u00e9xico",
+          "pct_2020": 34.19
+        },
+        {
+          "color": [
+            139,
+            92,
+            246,
+            200
+          ],
+          "elevacion": 563850.0,
+          "lat": 24.91233186813187,
+          "lon": -104.92993351648352,
+          "nombre_geo": "Durango",
+          "pct_2020": 37.59
+        },
+        {
+          "color": [
+            139,
+            92,
+            246,
+            200
+          ],
+          "elevacion": 666750.0,
+          "lat": 20.882970053475937,
+          "lon": -100.9569192513369,
+          "nombre_geo": "Guanajuato",
+          "pct_2020": 44.45
+        },
+        {
+          "color": [
+            244,
+            63,
+            94,
+            200
+          ],
+          "elevacion": 984300.0000000001,
+          "lat": 17.94715415019763,
+          "lon": -100.10311462450593,
+          "nombre_geo": "Guerrero",
+          "pct_2020": 65.62
+        },
+        {
+          "color": [
+            245,
+            158,
+            11,
+            200
+          ],
+          "elevacion": 684900.0,
+          "lat": 20.448964736842104,
+          "lon": -98.80516315789474,
+          "nombre_geo": "Hidalgo",
+          "pct_2020": 45.66
+        },
+        {
+          "color": [
+            139,
+            92,
+            246,
+            200
+          ],
+          "elevacion": 488850.00000000006,
+          "lat": 20.874342358078604,
+          "lon": -103.56340633187773,
+          "nombre_geo": "Jalisco",
+          "pct_2020": 32.59
+        },
+        {
+          "color": [
+            245,
+            158,
+            11,
+            200
+          ],
+          "elevacion": 761400.0,
+          "lat": 19.38027512437811,
+          "lon": -99.51094029850746,
+          "nombre_geo": "M\u00e9xico",
+          "pct_2020": 50.76
+        },
+        {
+          "color": [
+            245,
+            158,
+            11,
+            200
+          ],
+          "elevacion": 683400.0,
+          "lat": 19.305480208333332,
+          "lon": -101.84229548611111,
+          "nombre_geo": "Michoac\u00e1n",
+          "pct_2020": 45.56
+        },
+        {
+          "color": [
+            245,
+            158,
+            11,
+            200
+          ],
+          "elevacion": 789450.0,
+          "lat": 18.762456603773586,
+          "lon": -98.99398679245283,
+          "nombre_geo": "Morelos",
+          "pct_2020": 52.63
+        },
+        {
+          "color": [
+            139,
+            92,
+            246,
+            200
+          ],
+          "elevacion": 458100.0,
+          "lat": 21.81247452471483,
+          "lon": -105.18871596958175,
+          "nombre_geo": "Nayarit",
+          "pct_2020": 30.54
+        },
+        {
+          "color": [
+            16,
+            185,
+            129,
+            200
+          ],
+          "elevacion": 295500.0,
+          "lat": 25.584174096385542,
+          "lon": -99.96987018072289,
+          "nombre_geo": "Nuevo Le\u00f3n",
+          "pct_2020": 19.7
+        },
+        {
+          "color": [
+            244,
+            63,
+            94,
+            200
+          ],
+          "elevacion": 957450.0,
+          "lat": 16.96308734177215,
+          "lon": -96.14415253164557,
+          "nombre_geo": "Oaxaca",
+          "pct_2020": 63.83
+        },
+        {
+          "color": [
+            244,
+            63,
+            94,
+            200
+          ],
+          "elevacion": 950550.0,
+          "lat": 19.19245703422053,
+          "lon": -97.77923536121673,
+          "nombre_geo": "Puebla",
+          "pct_2020": 63.37
+        },
+        {
+          "color": [
+            139,
+            92,
+            246,
+            200
+          ],
+          "elevacion": 492750.0,
+          "lat": 20.931559375,
+          "lon": -99.78552265625,
+          "nombre_geo": "Quer\u00e9taro",
+          "pct_2020": 32.85
+        },
+        {
+          "color": [
+            139,
+            92,
+            246,
+            200
+          ],
+          "elevacion": 672600.0,
+          "lat": 19.777975595238097,
+          "lon": -87.88111636904762,
+          "nombre_geo": "Quintana Roo",
+          "pct_2020": 44.84
+        },
+        {
+          "color": [
+            139,
+            92,
+            246,
+            200
+          ],
+          "elevacion": 669600.0,
+          "lat": 22.56377925925926,
+          "lon": -100.25440037037038,
+          "nombre_geo": "San Luis Potos\u00ed",
+          "pct_2020": 44.64
+        },
+        {
+          "color": [
+            16,
+            185,
+            129,
+            200
+          ],
+          "elevacion": 423750.0,
+          "lat": 24.864082742316786,
+          "lon": -107.61775460992908,
+          "nombre_geo": "Sinaloa",
+          "pct_2020": 28.25
+        },
+        {
+          "color": [
+            139,
+            92,
+            246,
+            200
+          ],
+          "elevacion": 467850.0,
+          "lat": 29.194765531914893,
+          "lon": -111.07760170212767,
+          "nombre_geo": "Sonora",
+          "pct_2020": 31.19
+        },
+        {
+          "color": [
+            245,
+            158,
+            11,
+            200
+          ],
+          "elevacion": 794400.0,
+          "lat": 17.944541552511417,
+          "lon": -92.71873789954338,
+          "nombre_geo": "Tabasco",
+          "pct_2020": 52.96
+        },
+        {
+          "color": [
+            139,
+            92,
+            246,
+            200
+          ],
+          "elevacion": 536550.0,
+          "lat": 25.094959509202454,
+          "lon": -98.68671472392639,
+          "nombre_geo": "Tamaulipas",
+          "pct_2020": 35.77
+        },
+        {
+          "color": [
+            245,
+            158,
+            11,
+            200
+          ],
+          "elevacion": 874200.0,
+          "lat": 19.472574603174603,
+          "lon": -98.09645555555555,
+          "nombre_geo": "Tlaxcala",
+          "pct_2020": 58.28
+        },
+        {
+          "color": [
+            244,
+            63,
+            94,
+            200
+          ],
+          "elevacion": 912750.0,
+          "lat": 19.86393436853002,
+          "lon": -96.78179855072464,
+          "nombre_geo": "Veracruz",
+          "pct_2020": 60.85
+        },
+        {
+          "color": [
+            245,
+            158,
+            11,
+            200
+          ],
+          "elevacion": 717600.0,
+          "lat": 20.70595534591195,
+          "lon": -88.89161635220125,
+          "nombre_geo": "Yucat\u00e1n",
+          "pct_2020": 47.84
+        },
+        {
+          "color": [
+            139,
+            92,
+            246,
+            200
+          ],
+          "elevacion": 656400.0,
+          "lat": 22.934925593667547,
+          "lon": -102.80285540897097,
+          "nombre_geo": "Zacatecas",
+          "pct_2020": 43.76
+        }
+      ],
+      "elevationScale": 1,
+      "getElevation": "@@=elevacion",
+      "getFillColor": "@@=color",
+      "getPosition": "@@=[lon, lat]",
+      "id": "0f065c7e-8aa5-4e96-823b-072f4050b73c",
+      "pickable": true,
+      "radius": 18000
+    }
+  ],
+  "mapProvider": "carto",
+  "mapStyle": "https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json",
+  "views": [
+    {
+      "@@type": "MapView",
+      "controller": true
+    }
+  ]
+};
+    const tooltip = {'html': "<div style='font-family: Inter, sans-serif;'><b>{nombre_geo}</b><br/>Población en Pobreza: <b style='color:#f43f5e'>{pct_2020}%</b></div>"};
+    const customLibraries = null;
+    const configuration = null;
+
+    const deckInstance = createDeck({
+                  container,
+      jsonInput,
+      tooltip,
+      customLibraries,
+      configuration
+    });
+
+  </script>
+</html>

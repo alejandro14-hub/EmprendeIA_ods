@@ -1,0 +1,68 @@
+/*-- scss:defaults --*/
+$body-bg: #0d1117;
+$body-color: #c9d1d9;
+
+/*-- scss:rules --*/
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap');
+
+body {
+  font-family: 'Inter', -apple-system, sans-serif !important;
+  background-color: #0d1117;
+  margin: 0;
+}
+
+/* Premium Sober Cards */
+.valuebox, .card, .html-widget {
+  background: rgba(22, 27, 34, 0.4) !important;
+  border: 1px solid rgba(240, 246, 252, 0.1) !important;
+  border-radius: 8px !important;
+  backdrop-filter: blur(8px) !important;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1) !important;
+  transition: transform 0.2s ease, border-color 0.2s ease !important;
+  overflow: hidden;
+}
+
+.valuebox:hover, .card:hover {
+  border-color: rgba(240, 246, 252, 0.2) !important;
+}
+
+/* Clean Typography */
+.valuebox-title {
+  font-size: 0.85rem !important;
+  color: #8b949e !important;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-weight: 500 !important;
+}
+
+.valuebox-value {
+  font-size: 2rem !important;
+  padding-top: 5px !important;
+  font-weight: 400 !important;
+  color: #f0f6fc !important;
+}
+
+/* Minimalist Navbar */
+.navbar {
+  background: #161b22 !important;
+  border-bottom: 1px solid #30363d !important;
+}
+.navbar-brand {
+  font-weight: 500 !important;
+  color: #f0f6fc !important;
+}
+.nav-link.active {
+  color: #58a6ff !important;
+  border-bottom: 2px solid #58a6ff !important;
+}
+
+/* Disabing default card borders from bslib */
+.bslib-grid-item {
+  border: none !important;
+}
+
+/* Thin discreet scrollbar */
+::-webkit-scrollbar { width: 4px; height: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #30363d; border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: #484f58; }

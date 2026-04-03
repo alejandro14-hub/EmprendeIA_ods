@@ -1,0 +1,86 @@
+/*-- scss:defaults --*/
+$body-bg: #0f172a;
+$body-color: #f1f5f9;
+
+/*-- scss:rules --*/
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap');
+
+body {
+  background: linear-gradient(135deg, #0a0f1c, #162032);
+  background-attachment: fixed;
+  font-family: 'Inter', -apple-system, system-ui, sans-serif !important;
+  margin: 0;
+}
+
+/* ValueBoxes and Cards Glassmorphism */
+.valuebox, .card, .html-widget {
+  background: rgba(30, 41, 59, 0.45) !important;
+  backdrop-filter: blur(16px) !important;
+  -webkit-backdrop-filter: blur(16px) !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  border-radius: 16px !important;
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3) !important;
+  transition: all 0.3s ease !important;
+  overflow: hidden;
+}
+
+.valuebox:hover, .card:hover {
+  transform: translateY(-4px) !important;
+  box-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.45), 0 0 20px rgba(255,255,255,0.05) !important;
+  background: rgba(38, 50, 72, 0.6) !important;
+  border: 1px solid rgba(255, 255, 255, 0.15) !important;
+}
+
+/* Typography Enhancements */
+.valuebox-title {
+  font-size: 0.9rem !important;
+  opacity: 0.9 !important;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-weight: 600 !important;
+  color: #cbd5e1 !important;
+}
+
+.valuebox-value {
+  font-size: 2.1rem !important;
+  padding-top: 5px !important;
+  font-weight: 800 !important;
+  text-shadow: 0 0 15px rgba(255, 255, 255, 0.15) !important;
+}
+
+/* Navbar Premium */
+.navbar {
+  background: rgba(15, 23, 42, 0.8) !important;
+  backdrop-filter: blur(12px) !important;
+  -webkit-backdrop-filter: blur(12px) !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
+}
+
+.navbar-brand {
+  font-weight: 800 !important;
+  letter-spacing: -0.02em;
+  background: -webkit-linear-gradient(45deg, #60a5fa, #c084fc);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Charts / Widget container resets */
+.bslib-grid-item {
+  border: none !important;
+}
+
+/* Custom Scrollbar for sleek UI */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: rgba(15, 23, 42, 0.5); 
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(96, 165, 250, 0.3); 
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(96, 165, 250, 0.5); 
+}

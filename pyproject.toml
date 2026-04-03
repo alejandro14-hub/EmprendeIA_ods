@@ -1,0 +1,15 @@
+[project]
+name = "emprendeia-ods"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "jupyter>=1.1.1",
+    "notebook>=7.5.5",
+    "openpyxl>=3.1.5",
+    "pandas>=3.0.1",
+    "plotly==5.24.1",
+    "pydeck>=0.9.1",
+    "statsmodels>=0.14.6",
+]

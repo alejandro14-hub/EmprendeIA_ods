@@ -1,0 +1,19 @@
+Creative Commons Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)
+
+Copyright (c) 2026 EmprendeIA_ods — Alejandro Valentin Saldaña Mendez et al.
+
+Este repositorio y su contenido se distribuyen bajo la licencia
+Creative Commons Attribution-ShareAlike 4.0 International.
+
+Eres libre de:
+  - Compartir: copiar y redistribuir el material en cualquier medio o formato
+  - Adaptar: remezclar, transformar y construir a partir del material para
+    cualquier propósito, incluso comercialmente
+
+Bajo los siguientes términos:
+  - Atribución: debes dar crédito apropiado al equipo EmprendeIA_ods,
+    proporcionar un enlace a la licencia e indicar si se hicieron cambios.
+  - CompartirIgual: si remezclas o transformas el material, debes distribuir
+    tus contribuciones bajo la misma licencia CC BY-SA 4.0.
+
+Texto legal completo: https://creativecommons.org/licenses/by-sa/4.0/legalcode

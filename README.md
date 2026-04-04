@@ -13,8 +13,6 @@
 | Eduardo Francisco Peñaloza Uribe  | Narrativa - Storytelling          |
 | Tetsu Nicolas Osnaya Quevedo      | Desarrollo - Dashboard           | 
 
-
-
 ---
 
 ## ODS elegidos
@@ -46,7 +44,7 @@ EmprendeIA_ods/
 ├── scripts/     ← Scripts de limpieza y procesamiento
 ├── dashboard/   ← Archivos del tablero final
 ├── LICENSE
-├── DECLARATORIA_IA.md
+├── ai-log.md    ← Registro estratégico de uso de IA
 └── EmprendeIA_ODS_Storytelling.ipynb
 ```
 
@@ -93,10 +91,13 @@ EmprendeIA_ods/
 
 ---
 
-## Cómo ejecutar
+## Cómo ejecutar la plataforma
+
+El proyecto ha evolucionado a una aplicación interactiva multi-página desarrollada con **Quarto Dashboards**.
+
 ```bash
-# Requiere uv + miniconda
-uv run jupyter notebook EmprendeIA_ODS_Storytelling.ipynb
+# Entorno gestionado mediante uv
+uv run quarto preview Tablero_ods_EmprendeIA.qmd
 ```
 
-Dependencias: `pandas`, `plotly`, `openpyxl`
+Dependencias principales instaladas en el contenedor: `pandas`, `plotly`, `pydeck`, `quarto-cli`, `openpyxl`

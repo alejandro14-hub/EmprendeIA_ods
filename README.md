@@ -32,18 +32,18 @@
 Esta pregunta guía todo el tablero: exploramos si la relación Pobreza → Educación → Empleo
 funciona como se espera, o si hay una desconexión estructural que perpetúa el ciclo.
 
-### Coherencia Narrativa (Módulo C2)
+### Coherencia Narrativa 
 El relato de nuestro tablero está dividido en 3 Actos:
 1. **Topografía de la Pobreza:** Condiciona estadísticamente la línea de salida (ODS 1).
 2. **Abandono Escolar:** Cómo la falta de ingresos obliga a la deserción media superior (ODS 4).
 3. **Condena Laboral:** Cómo los que abandonaron la prepa son absorbidos por ocupaciones elementales sin salarios justos ni formalidad (ODS 8).
 
-### Potencial de Impacto (Módulo C3)
+### Potencial de Impacto 
 Este tablero expone visual y analíticamente el mito de la "meritocracia pura". Al demostrar tridimensionalmente que la deserción y la pobreza extrema están co-relacionadas, el tablero funciona como una herramienta de divulgación social para crear conciencia en formuladores de políticas públicas sobre por qué las becas escolares por sí solas no solucionan el ciclo sin atacar la pobreza estructural.
 
 ---
 
-## Justificación de la Selección de Datos (Módulo B3)
+## Justificación de la Selección de Datos 
 Elegimos la ENOE y el CONEVAL porque son las **únicas fuentes estadísticamente fiables** de cobertura nacional estandarizada.
 *   Decidimos enfocar los datos del **ODS 4 en Abandono en Nivel Medio Superior** porque, de acuerdo a la SEP, es el principal embudo formativo donde los jóvenes ingresan a la Población Económicamente Activa.
 *   Optamos por aislar los datos del **ODS 8 al año 2019** debido a que los registros de 2020 en adelante presentaban colapsos estadísticos (`NaN`) en la captura de desocupación a causa de la paralización laboral por COVID-19, asegurando así la integridad del modelo tridimensional.

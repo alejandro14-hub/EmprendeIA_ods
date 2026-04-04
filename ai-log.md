@@ -22,7 +22,7 @@ Decidimos usar IA exclusivamente como un acelerador técnico para la materializa
 ### 2026-04-03 | Antigravity | Migración Tridimensional Asistida (Plotly y PyDeck)
 - *Tarea*: Le proporcionamos nuestros `DataFrames` pre-limpiados y la lógica condicional que diseñamos manualmente. Pedimos que tradujera nuestros mapas estáticos de Matplotlib a PyDeck tridimensional interactivo, y a un Plotly 3D el cubo de la precariedad.
 - *Resultado*: Generación de sintaxis para `px.scatter_3d` y `pdk.Deck` preservando escrupulosamente los apuntadores de datos a nuestros DataFrames originales.
-- *Decisión*: Validamos exhaustivamente las variables cruzadas del Cubo. De hecho, el equipo humano había descubierto previamente que los datos de la ENOE 2020 de INEGI tenían valores nulos (NaN) para la desocupación estatal. Nosotros, como equipo de datos, tomamos la decisión técnica rigurosa de limitar el ODS 8 al año 2019 para mantener la integridad relacional del cubo 3D. La IA no participó en esa limpieza estadística, sólo en el envoltorio gráfico. Del mismo modo, estandarizamos y depuramos manualmente los sufijos numéricos de "Estados Unidos Mexicanos" en los archivos de la SEP (ODS 4).
+- *Decisión*: Validamos exhaustivamente las variables cruzadas del Cubo. De hecho, el equipo había descubierto previamente que los datos de la ENOE 2020 de INEGI tenían valores nulos (NaN) para la desocupación estatal. Nosotros, como equipo de datos, tomamos la decisión técnica rigurosa de limitar el ODS 8 al año 2019 para mantener la integridad relacional del cubo 3D. La IA no participó en esa limpieza estadística, sólo en el envoltorio gráfico. Del mismo modo, estandarizamos y depuramos manualmente los sufijos numéricos de "Estados Unidos Mexicanos" en los archivos de la SEP (ODS 4).
 
 ### 2026-04-03 | Antigravity | Depuración de Caché HTML y Compatibilidad Plotly
 - *Tarea*: El renderizador del Quarto Dashboard fallaba e inyectaba tres copias sobrepuestas de la gráfica 3D en el HTML. Le pasamos a la IA la descripción visual del error asumiendo que era nuestro `px.scatter_3d()`.
@@ -31,5 +31,5 @@ Decidimos usar IA exclusivamente como un acelerador técnico para la materializa
 
 ### NO usamos IA para hacer lo siguiente:
 - **La selección teórica de las 3 variables socioeconómicas y los Datasets del origen** (Extracción manual de CONEVAL, SEP e INEGI).
-- **El cruce estructural de los datos**: La hipótesis inicial de que "ningún estado tiene mucho abandono escolar sin tener también forzosamente pobreza a la vez" fue concebida y confirmada analíticamente por los humanos.
-- **La redacción final del Storytelling:** Las líneas discursivas de los "Actos", y el concepto dramático de *Estudiar No Es Suficiente*, es total redacción y análisis existencial del talento del equipo humano.
+- **El cruce estructural de los datos**: La hipótesis inicial de que "ningún estado tiene mucho abandono escolar sin tener también forzosamente pobreza a la vez" fue concebida y confirmada analíticamente por el equipo.
+- **La redacción final del Storytelling:** Las líneas discursivas de los "Actos", y el concepto dramático de *Estudiar No Es Suficiente*, es total redacción y análisis existencial del talento del equipo.
